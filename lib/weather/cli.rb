@@ -2,69 +2,107 @@
 
 class Weather::Cli
 
-
     def call
         greeting_user
     end
 
-    def weather_by_state_call(state_name)
+    def weather_by_state(state_name)
         state_name = state_name.gsub(/  */, " ")
         state_name = state_name.gsub(/ /, "%20")
-        current_weather_1 = Weather::CurrentWheater.new(state_name).get_weather_by_state
-        getting_weather_coord(current_weather_1)
+        state_current_weather = Weather::CurrentWheater.new(state_name).get_weather_by_state
+        getting_weather_coord(state_current_weather)
+    end
+
+    def weather_by_zip_code(zip_code)
+        zip_code_current_weather = Weather::CurrentWheater.new(nil, zip_code).get_weather_by_zip_code
+        getting_weather_coord(zip_code_current_weather)
     end
 
     def getting_weather_coord(current_weather)
-        puts ""
-        print "lon: " + current_weather["coord"]["lon"].to_s + "  "
-        puts "lat: " + current_weather["coord"]["lat"].to_s
-        getting_weather_condition(current_weather)
+        @input_1
+        if current_weather["name"].class == NilClass
+            puts ""
+            if @input_1 == "by state"
+                puts "Please enter a valid state name"
+                get_state_name
+            elsif @input_1 == "by zipcode"
+                puts "Please enter a valid zipcode"
+                get_zip_code
+            end
+        else
+            puts ""
+            puts "Current weather for #{current_weather["name"]}, #{current_weather["sys"]["country"]}, timezone  #{current_weather["timezone"].to_s}"
+            print "lon: " + current_weather["coord"]["lon"].to_s + "  "
+            puts "lat: " + current_weather["coord"]["lat"].to_s
+            getting_weather_condition(current_weather)  
+        end
     end
 
     def getting_weather_condition(current_weather)
-        puts current_weather["weather"]["description"]
+        puts "description: #{current_weather["weather"][0]["description"]}"
+        puts "Current temperature: #{current_weather["main"]["temp"].to_s}f°"
+        print "Temperature max: #{current_weather["main"]["temp_max"].to_s}f°, "
+        puts "temperature min: #{current_weather["main"]["temp_min"].to_s}f°, "
+        puts "Feels like: #{current_weather["main"]["feels_like"].to_s}f°"
+        puts "Humidity: #{current_weather["main"]["humidity"].to_s}"
+        puts "Wind speed: #{current_weather["wind"]["speed"]} mph"
+        puts ""
+    end
+
+    def get_state_name
+        puts "Enter your state name"
+        input_2 = gets.chomp 
+        weather_by_state(input_2)
+    end
+
+    def get_zip_code
+        puts "Enter zipcode"
+        input_2 = gets.chomp 
+        weather_by_zip_code(input_2)
     end
 
     def greeting_user
 
-        input_1 = nil
-        zip_code = input_1 != "by zipcode"
-        city = input_1 != "by city" 
+        @input_1 = nil
+        zip_code = @input_1 != "by zipcode"
+        exit_value = @input_1 != "exit"
 
-        while input_1 != "by state" || city || zip_code || "exit"
+        while @input_1 != "by state" || zip_code || exit_value
+            puts ""
             puts "Hello dear user"
             puts "This program give you information about the current weather in the US"
-            puts "for weather in your state enter 'by state'" 
-            puts "for weather in your city enter  'by city'"
-            puts "for weather by your zipcode enter 'by zipcode'"
+            puts "for weather in your state enter 'by state' " 
+            puts "for weather by your zipcode enter 'by zipcode' "
             puts "Enter your query here"
     
-            input_1 = gets.chomp
-            
-            case input_1
+            @input_1 = gets.chomp
+        
+            case @input_1
             when 
                 "by state"
-                puts "Enter state name"
-                input_2 = gets.chomp 
-                self.weather_by_state_call(input_2)
+                get_state_name
                 break
             when 
-                "by city"
-                puts "by city present"
-            when
                 "by zipcode"
-                puts "by zipcode present"
+                get_zip_code
+                break
             when
                 "exit"
                 break
             else
-                puts "Please enter a valid input "
+                puts ""
+                puts "Please enter a valid query "
                 puts ""
             end
         end
     end
 end
 
+
+
+
+
+#*****CURRENT WEATHER************
 
 # {"coord"=>{"lon"=>-74.5, "lat"=>40.17},
 #  "weather"=>
