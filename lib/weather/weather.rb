@@ -3,7 +3,7 @@
 
 class Weather::CurrentWeather
    
-    attr_reader  :description, :condition, :interface, :coordinate, :cod
+    attr_reader :interface 
 
     def initialize(interface=nil)
         @interface = interface
