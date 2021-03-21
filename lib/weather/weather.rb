@@ -3,38 +3,88 @@
 
 class Weather::CurrentWeather
    
-    attr_reader :interface 
+   attr_accessor :lon, :lat, :temperature, :temp_max, :temp_min, :humidity, :pressure, :description, :feels_like, :wind_speed, :zip_code, :location_name, :location, :message
+   
+   @@all = []
 
-    def initialize(interface=nil)
-        @interface = interface
-    end
+   def self.all
+      @@all
+   end
 
-    def description
-        print "Description: #{self.interface["weather"][0]["description"]}"
-    end
+   def save
+      self.class.all << self
+   end
 
-    def present_current_weather
-        puts ""
-        puts "Current weather for: #{self.interface["name"]}, #{self.interface["sys"]["country"]}, timezone:  #{self.interface["timezone"].to_s}" 
-    end
+   # Shared method for state and zipcode entry
 
-    def coordinate
-        print "lon: " + self.interface["coord"]["lon"].to_s + "  "
-        print "lat: " + self.interface["coord"]["lat"].to_s
-    end
+   def self.validate_weather_data(weather_data, entry)
+      if weather_data["cod"] == 200
+         @current_weather.set_up_properties(weather_data, entry)
+      elsif weather_data["cod"] == "404"
+        @current_weather.message = " \nYou probably had a wrong entry please try again!"
+      else
+         @current_weather.message = "\nSorry something wrent wrong"
+      end
+   end
 
-    def condition
-        puts "Current temperature: #{self.interface["main"]["temp"].to_s}f°"
-        puts "Temperature max: #{self.interface["main"]["temp_max"].to_s}f°"
-        puts "Temperature min: #{self.interface["main"]["temp_min"].to_s}f°"
-        puts "Feels like: #{self.interface["main"]["feels_like"].to_s}f°"
-        puts "Humidity: #{self.interface["main"]["humidity"].to_s}"
-        puts "Wind speed: #{self.interface["wind"]["speed"]} mph"
-    end
+   def set_up_properties(weather_data, entry)
+      self.location = entry.gsub(/%20/, " ")
+      self.message = "yes"
+      self.lon = weather_data["coord"]["lon"].to_s 
+      self.lat = weather_data["coord"]["lat"].to_s
+      self.temperature = weather_data["main"]["temp"].to_s
+      self.temp_max = weather_data["main"]["temp_max"].to_s + "f°"
+      self.temp_min = weather_data["main"]["temp_min"].to_s + "f°"      
+      self.humidity = weather_data["main"]["humidity"].to_s
+      self.pressure = weather_data["main"]["pressure"].to_s
+      self.description = weather_data["weather"][0]["description"]
+      self.feels_like = weather_data["main"]["feels_like"].to_s + "f°" 
+      self.wind_speed = weather_data["wind"]["speed"].to_s  + "mph"
+      self.location_name = weather_data["name"]
+      self.save
+   end
 
-    def code
-        self.interface["code"]
-    end
+   def self.find_by_location(location)
+      self.all.find {|weather| weather.location == location}
+   end
+
+
+   # State methods section
+
+
+   def self.find_or_create_by_state_name(state_name)
+      if self.all.include?(self.find_by_location(state_name)) == false                           
+         added_20_percent_to_state_name = state_name.gsub(/  */, " ").gsub(/ /, "%20")
+         self.create_by_state_name(added_20_percent_to_state_name)
+      else
+         self.find_by_location(state_name)
+      end
+   end
+
+   def self.create_by_state_name(state_name)
+      @current_weather = self.new
+      weather_data = Weather::Api.new.get_state_current_weather_data(state_name)     # contribution with Api class
+      validate_weather_data(weather_data, state_name)
+      @current_weather
+   end
+
+
+   # Zipcode section
+
+   def self.find_or_create_by_zip_code(zip_code)
+      if self.all.include?(self.find_by_location(zip_code)) == false
+         self.create_by_zip_code(zip_code)
+      else
+         self.find_by_location(zip_code)
+      end
+   end
+
+   def self.create_by_zip_code(zip_code)
+      @current_weather = self.new
+      weather_data = Weather::Api.new.get_current_weather_by_zip_code(zip_code)     # contribution with Api class
+      validate_weather_data(weather_data, zip_code)
+      @current_weather
+   end
 end
 
 
@@ -69,6 +119,23 @@ end
 #  "id"=>5101760,
 #  "name"=>"New Jersey",
 #  "cod"=>200}
+
+
+    #     print "lon: " + self.interface["coord"]["lon"].to_s + "  "
+    #     print "lat: " + self.interface["coord"]["lat"].to_s
+
+ 
+    #     puts "Current temperature: #{self.interface["main"]["temp"].to_s}f°"
+    #     puts "Temperature max: #{self.interface["main"]["temp_max"].to_s}f°"
+    #     puts "Temperature min: #{self.interface["main"]["temp_min"].to_s}f°"
+    #     puts "Feels like: #{self.interface["main"]["feels_like"].to_s}f°"
+    #     puts "Humidity: #{self.interface["main"]["humidity"].to_s}"
+    #     puts "Wind speed: #{self.interface["wind"]["speed"]} mph"
+  
+
+      #     print "lon: " + self.interface["coord"]["lon"].to_s + "  "
+      #     print "lat: " + self.interface["coord"]["lat"].to_s
+      # end
 
 
 
