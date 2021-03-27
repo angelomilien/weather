@@ -19,15 +19,15 @@ class Weather::CurrentWeather
 
    def self.validate_weather_data(weather_data, entry)
       if weather_data["cod"] == 200
-         @current_weather.set_up_properties(weather_data, entry)
+         @@current_weather.get_properties(weather_data, entry)
       elsif weather_data["cod"] == "404"
-        @current_weather.message = " \nYou probably had a wrong entry please try again!"
+        @@current_weather.message = " \nYou probably had a wrong entry please try again!"
       else
-         @current_weather.message = "\nSorry something wrent wrong"
+         @@current_weather.message = "\nSorry something wrent wrong"
       end
    end
 
-   def set_up_properties(weather_data, entry)
+   def get_properties(weather_data, entry)
       self.location = entry.gsub(/%20/, " ")
       self.message = "yes"
       self.lon = weather_data["coord"]["lon"].to_s 
@@ -62,10 +62,10 @@ class Weather::CurrentWeather
    end
 
    def self.create_by_state_name(state_name)
-      @current_weather = self.new
+      @@current_weather = self.new
       weather_data = Weather::Api.new.get_state_current_weather_data(state_name)     # contribution with Api class
       validate_weather_data(weather_data, state_name)
-      @current_weather
+      @@current_weather
    end
 
 
@@ -80,10 +80,10 @@ class Weather::CurrentWeather
    end
 
    def self.create_by_zip_code(zip_code)
-      @current_weather = self.new
+      @@current_weather = self.new
       weather_data = Weather::Api.new.get_current_weather_by_zip_code(zip_code)     # contribution with Api class
       validate_weather_data(weather_data, zip_code)
-      @current_weather
+      @@current_weather
    end
 end
 

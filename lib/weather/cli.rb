@@ -37,7 +37,7 @@ class Weather::Cli
            puts ""
            puts "Hello the current weather for " + current_weather.location_name + " is:"
            puts "Temperature: " + current_weather.temperature + ", " + current_weather.description + ", feels like: " + current_weather.feels_like
-           puts "Temp max: " + current_weather.temp_max + "temp: " + current_weather.temp_min
+           puts "Temp max: " + current_weather.temp_max + ", Temp min: " + current_weather.temp_min
            puts "Lon: " + current_weather.lon + ", Lat: " + current_weather.lat
            puts "Wind speed: " + current_weather.wind_speed
            puts "Humidity: " + current_weather.humidity
