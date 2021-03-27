@@ -11,11 +11,7 @@ class Weather::Cli
     def get_state_name_from_user                                         
         puts "Enter your state name"
         input_2 = gets.chomp 
-        get_current_weather_by_state_name(input_2)
-    end
-
-    def get_current_weather_by_state_name(state_name)                                     
-        display_weather(Weather::CurrentWeather.find_or_create_by_state_name(state_name))      # contribution with Current_Weather class 
+        display_weather(Weather::CurrentWeather.find_or_create_by_state_name(input_2))
     end
     
     # ZIP CODE SECTION
@@ -23,11 +19,7 @@ class Weather::Cli
     def get_zip_code_from_user
         puts "Enter zipcode"
         input_2 = gets.chomp 
-        get_current_weather_by_zip_code(input_2)
-    end
-
-    def get_current_weather_by_zip_code(zip_code)
-        display_weather(Weather::CurrentWeather.find_or_create_by_zip_code(zip_code))
+        display_weather(Weather::CurrentWeather.find_or_create_by_zip_code(input_2))
     end
 
     # ZIPCODE AND STATE COMMON FUNCTIONS
