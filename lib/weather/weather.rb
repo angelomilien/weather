@@ -17,9 +17,9 @@ class Weather::CurrentWeather
 
    # Shared method for state and zipcode entry
 
-   def self.validate_weather_data(weather_data, entry)
+   def self.validate_weather_data(weather_data, location)
       if weather_data["cod"] == 200
-         @@current_weather.get_properties(weather_data, entry)
+         @@current_weather.set_up_properties(weather_data, location)
       elsif weather_data["cod"] == "404"
         @@current_weather.message = " \nYou probably had a wrong entry please try again!"
       else
@@ -27,7 +27,7 @@ class Weather::CurrentWeather
       end
    end
 
-   def get_properties(weather_data, entry)
+   def set_up_properties(weather_data, entry)
       self.location = entry.gsub(/%20/, " ")
       self.message = "yes"
       self.lon = weather_data["coord"]["lon"].to_s 
@@ -48,24 +48,29 @@ class Weather::CurrentWeather
       self.all.find {|weather| weather.location == location}
    end
 
-
    # State methods section
 
 
    def self.find_or_create_by_state_name(state_name)
-      if self.all.include?(self.find_by_location(state_name)) == false                           
-         added_20_percent_to_state_name = state_name.gsub(/  */, " ").gsub(/ /, "%20")
-         self.create_by_state_name(added_20_percent_to_state_name)
+      if self.all.include?(self.find_by_location(state_name)) == false         
+         self.create_by_state_name(add_20_percent_into_state_name_space(state_name))
       else
          self.find_by_location(state_name)
       end
    end
 
+   def self.add_20_percent_into_state_name_space(state_name)
+      state_name.gsub(/  */, " ").gsub(/ /, "%20")
+   end
+
    def self.create_by_state_name(state_name)
       @@current_weather = self.new
-      weather_data = Weather::Api.new.get_state_current_weather_data(state_name)     # contribution with Api class
-      validate_weather_data(weather_data, state_name)
+      validate_weather_data(get_weather_data_by_state(state_name), state_name)
       @@current_weather
+   end
+
+   def self.get_weather_data_by_state(location)
+      weather_data = Weather::Api.new.get_state_current_weather_data(location) 
    end
 
 
@@ -81,9 +86,12 @@ class Weather::CurrentWeather
 
    def self.create_by_zip_code(zip_code)
       @@current_weather = self.new
-      weather_data = Weather::Api.new.get_current_weather_by_zip_code(zip_code)     # contribution with Api class
-      validate_weather_data(weather_data, zip_code)
+      validate_weather_data(get_weather_data_zip_code(zip_code), zip_code)
       @@current_weather
+   end
+
+   def self.get_weather_data_zip_code(location)
+      weather_data = Weather::Api.new.get_current_weather_by_zip_code(location) 
    end
 end
 
