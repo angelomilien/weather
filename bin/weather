@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require_relative "../lib/environment"
+require_relative "../lib/weather/environment"
 
 Weather::Cli.new.call
