@@ -25,15 +25,15 @@ class Weather::Cli
     # ZIPCODE AND STATE COMMON FUNCTIONS
     
     def display_weather(current_weather)          
-           puts ""
-           puts "the current weather for " + current_weather.location_name + " is:"
-           puts "Temperature: " + current_weather.temperature + ", " + current_weather.description + ", feels like: " + current_weather.feels_like
-           puts "Temp max: " + current_weather.temp_max + ", Temp min: " + current_weather.temp_min
-           puts "Lon: " + current_weather.lon + ", Lat: " + current_weather.lat
-           puts "Wind speed: " + current_weather.wind_speed
-           puts "Humidity: " + current_weather.humidity
-           puts "Pressure: " + current_weather.pressure
-           puts ""
+        puts ""
+        puts "the current weather for " + current_weather.location_name + " is:"
+        puts "Temperature: " + current_weather.temperature + ", " + current_weather.description + ", feels like: " + current_weather.feels_like
+        puts "Temp max: " + current_weather.temp_max + ", Temp min: " + current_weather.temp_min
+        puts "Lon: " + current_weather.lon + ", Lat: " + current_weather.lat
+        puts "Wind speed: " + current_weather.wind_speed
+        puts "Humidity: " + current_weather.humidity
+        puts "Pressure: " + current_weather.pressure
+        puts ""
     end
 
     def first_display(current_weather)
@@ -45,6 +45,8 @@ class Weather::Cli
         puts "do you need more information about the weather?"
         puts "You can say 'yes/y' or 'no/n'"
     end
+
+    
 
     def terminate_program_on_fourth_deep_layer
         @fourth_nested = false
@@ -58,7 +60,6 @@ class Weather::Cli
         case current_weather.message # if weather is found or created it's message will be yes 
             when "yes"
                 first_display(current_weather)
-
                 while @fourth_nested
                     input_4 = gets.strip
                     case input_4.upcase
@@ -76,7 +77,7 @@ class Weather::Cli
                                         break
                                     when "NO","N"
                                         puts "program is terminated thank you!"
-                                        terminate_program_on_fourth_deep_layer  # will continue with more code after
+                                        terminate_program_on_fourth_deep_layer 
                                         break
                                     else
                                         puts "Enter 'yes/n' or  'no/n'"
@@ -85,7 +86,6 @@ class Weather::Cli
                         when "NO","N"
                            puts "program is terminated thank you!"
                            terminate_program_on_fourth_deep_layer
-                        #    break
                         else
                            puts ""
                            puts "Wrong input please try again"
@@ -101,8 +101,6 @@ class Weather::Cli
         @main_while_is = true
         @first_nested = false
         @second_nested = true
-        @third_nested = true
-        # @fourth_nested = true
         @fith_nested = true
         while @main_while_is
             
@@ -121,17 +119,15 @@ class Weather::Cli
                         puts "for state enter 'state/s' and 'zipcode/z' for zipcode"
                         while @second_nested
                             @third_nested = true
+                            @fourth_nested = true
                             input_2 = gets.strip
                             case input_2.downcase
                                 when "state","s"
-
                                     while @third_nested
-                                        @fourth_nested = true
                                         current_weather = get_state_name_from_user
                                         get_fourth_nested(current_weather)        
                                     end
                                 when "zipcode","z" 
-                                   
                                     while @third_nested
                                         current_weather = get_zip_code_from_user
                                         get_fourth_nested(current_weather)
@@ -155,7 +151,7 @@ class Weather::Cli
     end
 end
 
-# my Notes
+# Notes
 
 # description = case 16
 # when 13..19 then "teenager"
