@@ -8,7 +8,7 @@ class Weather::Cli
 
     # STATE SECTION
 
-    def get_state_name_from_user                                         
+    def get_state_name_from_user                                       
         puts "Enter your state name"
         input_3 = gets.strip 
         Weather::CurrentWeather.find_or_create_by_state_name(input_3)
@@ -47,6 +47,7 @@ class Weather::Cli
     end
 
     def terminate_program_on_fourth_deep_layer
+        @fourth_nested = false
         @third_nested = false
         @second_nested = false
         @first_nested = false
@@ -62,14 +63,29 @@ class Weather::Cli
                     input_4 = gets.strip
                     case input_4.upcase
                         when "YES", "Y"
-                           display_weather(current_weather)
-                           puts "program is terminated thank you!"
-                           terminate_program_on_fourth_deep_layer  # will continue with more code after
-                           break
+                            display_weather(current_weather)
+                            puts "Do you want to know the weather of another state or zipcode?"
+                            puts "Enter 'yes/y' or 'no/n' to terminate."
+                            while @fith_nested
+                                input_5 = gets.strip
+                                case input_5.upcase
+                                    when "YES", "Y"
+                                        puts "Enter 'state/s' for state and 'zipcode/z' for zipcode"
+                                        @fourth_nested = false
+                                        @third_nested = false
+                                        break
+                                    when "NO","N"
+                                        puts "program is terminated thank you!"
+                                        terminate_program_on_fourth_deep_layer  # will continue with more code after
+                                        break
+                                    else
+                                        puts "Enter 'yes/n' or  'no/n'"
+                                end
+                            end
                         when "NO","N"
                            puts "program is terminated thank you!"
                            terminate_program_on_fourth_deep_layer
-                           break
+                        #    break
                         else
                            puts ""
                            puts "Wrong input please try again"
@@ -86,8 +102,8 @@ class Weather::Cli
         @first_nested = false
         @second_nested = true
         @third_nested = true
-        @fourth_nested = true
-
+        # @fourth_nested = true
+        @fith_nested = true
         while @main_while_is
             
             while @first_nested == false
@@ -104,11 +120,13 @@ class Weather::Cli
                     when "YES", "Y"
                         puts "for state enter 'state/s' and 'zipcode/z' for zipcode"
                         while @second_nested
+                            @third_nested = true
                             input_2 = gets.strip
                             case input_2.downcase
                                 when "state","s"
 
                                     while @third_nested
+                                        @fourth_nested = true
                                         current_weather = get_state_name_from_user
                                         get_fourth_nested(current_weather)        
                                     end
