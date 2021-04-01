@@ -21,7 +21,7 @@ class Weather::CurrentWeather
       if weather_data["cod"] == 200
          @@current_weather.set_up_properties(weather_data, location)
       elsif weather_data["cod"] == "404"
-        @@current_weather.message = " \nYou probably had a wrong entry please try again!"
+        @@current_weather.message = " \nYou entered a wrong entry please try again!"
       else
          @@current_weather.message = "\nSorry something wrent wrong"
       end
