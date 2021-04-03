@@ -21,7 +21,7 @@ class Weather::CurrentWeather
       if weather_data["cod"] == 200
          @@current_weather.set_up_properties(weather_data, location)
       elsif weather_data["cod"] == "404"
-        @@current_weather.message = " \nYou entered a wrong entry please try again!"
+        @@current_weather.message = " \nYou entered a wrong input please try again! (check your spelling)"
       else
          @@current_weather.message = "\nSorry something wrent wrong"
       end
@@ -97,7 +97,7 @@ end
 
 
 
-# ****CURRENT WEATHER************
+# ****CURRENT WEATHER Data From api************
 
 # {"coord"=>{"lon"=>-74.5, "lat"=>40.17},
 #  "weather"=>
@@ -127,23 +127,6 @@ end
 #  "id"=>5101760,
 #  "name"=>"New Jersey",
 #  "cod"=>200}
-
-
-    #     print "lon: " + self.interface["coord"]["lon"].to_s + "  "
-    #     print "lat: " + self.interface["coord"]["lat"].to_s
-
- 
-    #     puts "Current temperature: #{self.interface["main"]["temp"].to_s}f°"
-    #     puts "Temperature max: #{self.interface["main"]["temp_max"].to_s}f°"
-    #     puts "Temperature min: #{self.interface["main"]["temp_min"].to_s}f°"
-    #     puts "Feels like: #{self.interface["main"]["feels_like"].to_s}f°"
-    #     puts "Humidity: #{self.interface["main"]["humidity"].to_s}"
-    #     puts "Wind speed: #{self.interface["wind"]["speed"]} mph"
-  
-
-      #     print "lon: " + self.interface["coord"]["lon"].to_s + "  "
-      #     print "lat: " + self.interface["coord"]["lat"].to_s
-      # end
 
 
 
