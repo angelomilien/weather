@@ -1,8 +1,7 @@
 # Weather
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/weather`. To experiment with that code, run `bin/console` for an interactive prompt.
+Welcome to Weather! This gem tell you; condition, temperature of the weather in your zipcode area  or in your state. 
 
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
@@ -22,7 +21,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To start the program type `bin/weather` in cli and follow instructions.
 
 ## Development
 
