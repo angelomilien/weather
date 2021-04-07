@@ -11,7 +11,7 @@ class Weather::Cli
     def get_state_name_from_user                                       
         puts "Enter your state name"
         input_3 = gets.strip 
-        Weather::CurrentWeather.find_or_create_by_state_name(input_3)
+        Weather::CurrentWeather.find_or_create_by_state_name(input_3.capitalize)
     end
     
     # ZIP CODE SECTION
