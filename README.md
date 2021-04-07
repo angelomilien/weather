@@ -21,7 +21,7 @@ Or install it yourself as:
 
 ## Usage
 
-To start the program type `bin/weather` in cli and follow instructions.
+To start the program after it instaled type `bin/weather` in cli and follow instructions.
 
 ## Development
 
